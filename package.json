@@ -1,0 +1,15 @@
+{
+  "name": "react-native-modal-pickers",
+  "version": "0.0.11",
+  "description": "A simple react native picker made with pure react native code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "peerDependencies": {
+    "react": ">16.0.0",
+    "react-native": ">0.60.0"
+  },
+  "author": "Alex Glick",
+  "license": "ISC"
+}
