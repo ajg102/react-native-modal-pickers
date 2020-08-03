@@ -31,13 +31,15 @@ const Picker = ({
   color = "#fff",
   placeholder = "Click here",
   shouldCloseOnChange = false,
-  closeButtonText = Platform.OS === "android" ? "DONE" : "Back",
+  closeButtonText = "Back",
   closeButtonContainerStyle = {},
   closeButtonTextStyle = {},
   selectedItemStyle = {},
   iOSHeaderStyles = {},
   checkedColor = "blue",
   uncheckedColor = "#ddd",
+  headerTintColor,
+  disabled = false,
 }) => {
   const [isOpen, setOpen] = useState(false);
 
@@ -95,8 +97,16 @@ const Picker = ({
 
   return (
     <>
-      <Pressable onPress={openOverlay} containerStyle={[containerStyle]}>
-        <Text style={[selectedItemTextStyle]}>
+      <Pressable
+        onPress={openOverlay}
+        containerStyle={[containerStyle]}
+        disabled={disabled}
+      >
+        <Text
+          numberOfLines={1}
+          ellipsizeMode="tail"
+          style={[selectedItemTextStyle]}
+        >
           {selectedLabel ? selectedLabel : placeholder}
         </Text>
         {renderIcon()}
@@ -120,17 +130,37 @@ const Picker = ({
             <Image
               source={require("../../../assets/backIcon/back-icon.png")}
               fadeDuration={0}
-              style={[styles.icon, title.length < 30 && styles.iconWithLabel]}
+              style={[
+                styles.icon,
+                title.length < 30 && styles.iconWithLabel,
+                headerTintColor && { tintColor: headerTintColor },
+              ]}
             />
-            <Text style={[styles.label, titleStyle]}>{closeButtonText}</Text>
+            <Text
+              style={[
+                styles.label,
+                titleStyle,
+                headerTintColor && { color: headerTintColor },
+              ]}
+            >
+              {closeButtonText}
+            </Text>
           </Pressable>
-          <Text style={[styles.headerText]}>{title}</Text>
+          <Text
+            style={[
+              styles.headerText,
+              titleStyle,
+              headerTintColor && { color: headerTintColor },
+            ]}
+          >
+            {title}
+          </Text>
         </View>
         <FlatList
           style={{ flex: 1, backgroundColor: color }}
           data={pickerItems}
           extraData={labelKey}
-          keyExtractor={(item) => item[valueKey]}
+          keyExtractor={(item, index) => item[valueKey] + index}
           renderItem={_renderItem}
           initialScrollIndex={selectedIndex}
           initialNumToRender={20}
@@ -218,6 +248,7 @@ const styles = StyleSheet.create({
   listItemText: {
     fontSize: 16,
     opacity: 0.87,
+    maxWidth: Dimensions.get("screen").width - 50,
   },
   selected: {
     fontSize: 17,

@@ -25,6 +25,8 @@ const Picker = ({
   selectedItemStyle = {},
   checkedColor = "blue",
   uncheckedColor = "#ddd",
+  disabled = false,
+  headerTintColor,
 }) => {
   const [isOpen, setOpen] = useState(false);
 
@@ -80,7 +82,11 @@ const Picker = ({
 
   return (
     <>
-      <Pressable onPress={openOverlay} containerStyle={[containerStyle]}>
+      <Pressable
+        onPress={openOverlay}
+        containerStyle={[containerStyle]}
+        disabled={disabled}
+      >
         <Text style={[selectedItemTextStyle]}>
           {selectedLabel ? selectedLabel : placeholder}
         </Text>
@@ -95,12 +101,20 @@ const Picker = ({
         }}
       >
         <View style={styles.androidHeader}>
-          <Text style={[styles.title, titleStyle]}>{title}</Text>
+          <Text
+            style={[
+              styles.title,
+              titleStyle,
+              headerTintColor && { color: headerTintColor },
+            ]}
+          >
+            {title}
+          </Text>
         </View>
         <FlatList
           data={pickerItems}
           extraData={labelKey}
-          keyExtractor={(item) => item[valueKey]}
+          keyExtractor={(item, index) => item[valueKey] + index}
           renderItem={_renderItem}
           initialScrollIndex={selectedIndex}
           getItemLayout={(data, index) => ({

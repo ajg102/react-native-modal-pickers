@@ -14,6 +14,7 @@ const Pressable = (
     onPress = () => {},
     containerStyle = {},
     androidBackground = TouchableNativeFeedback.Ripple("#ccc", false),
+    disabled = false,
   },
   rest
 ) => {
@@ -21,12 +22,18 @@ const Pressable = (
     <TouchableNativeFeedback
       onPress={onPress}
       background={androidBackground}
+      disabled={disabled}
       {...rest}
     >
       <View style={containerStyle}>{children}</View>
     </TouchableNativeFeedback>
   ) : (
-    <TouchableOpacity onPress={onPress} style={containerStyle} {...rest}>
+    <TouchableOpacity
+      onPress={onPress}
+      style={containerStyle}
+      disabled={disabled}
+      {...rest}
+    >
       {children}
     </TouchableOpacity>
   );
